@@ -52,6 +52,18 @@ data MergeMode
     After
   | -- | Merges attributes from the fragment into the target – useful for updating a store.
     UpsertAttributes
+  deriving (Enum, Bounded)
+
+instance Show MergeMode where
+  show :: MergeMode -> String
+  show Morph = "morph"
+  show Inner = "inner"
+  show Outer = "outer"
+  show Prepend = "prepend"
+  show Append = "append"
+  show Before = "before"
+  show After = "after"
+  show UpsertAttributes = "upsertAttributes"
 
 data MergeFragmentConfig = MergeFragmentConfig
   { mergeFragmentConfigSelector :: Maybe Selector
@@ -118,16 +130,7 @@ mergeFragments' config fragments =
           [ (\s -> "data: selector " <> Builder.lazyByteString s) <$> mergeFragmentConfigSelector config
           , Just $
               Builder.lazyByteString "data: mergeMode "
-                <> Builder.lazyByteString
-                  case mergeFragmentConfigMergeMode config of
-                    Morph -> "morph"
-                    Inner -> "inner"
-                    Outer -> "outer"
-                    Prepend -> "prepend"
-                    Append -> "append"
-                    Before -> "before"
-                    After -> "after"
-                    UpsertAttributes -> "upsertAttributes"
+                <> Builder.lazyByteString (pack (show (mergeFragmentConfigMergeMode config)))
           , Just $ Builder.lazyByteString "data: settleDuration " <> Builder.lazyByteString (pack (show (mergeFragmentConfigSettleDurationInMs config)))
           , Just $ Builder.lazyByteString "data: useViewTransition " <> Builder.lazyByteString (if mergeFragmentConfigUseViewTransition config then "true" else "false")
           ]

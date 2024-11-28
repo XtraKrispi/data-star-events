@@ -104,5 +104,6 @@ test-suite data-star-events-test
     -- Test dependencies.
     build-depends:
         base ^>=4.20.0.0,
+        bytestring,
         hspec,
         data-star-events
