@@ -170,7 +170,7 @@ removeFragments selector =
       intersperse
         newline
         [ Builder.lazyByteString "event: datastar-remove-fragments"
-        , Builder.lazyByteString "data: selector" <> Builder.lazyByteString selector
+        , Builder.lazyByteString "data: selector " <> Builder.lazyByteString selector
         , newline
         ]
 
